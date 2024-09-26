@@ -13,7 +13,7 @@ Species and Strain IDs used in the scripts:
 9.	177 - Kazakhstania servazzii
 
 Raw data information:
-Experiment data: All original raw data from the growth curves are in the excel sheets singlegrowthrawdata.xlsx and pairwisegrowthrawdata.xlsx. This includes information about glycerol stocks used, input counts, timepoints and colonies counted. For analysis, the normalized CFU counts were saved in the CFU files GCobs_single_normalized.csv and GCobs_paired_normalized.csv. All results from the community ass The python scripts used for parameter estimation and R scripts used for analysis use these files.
+Experiment data: All original raw data from the growth curves are in the excel sheets singlegrowthrawdata.xlsx and pairwisegrowthrawdata.xlsx. This includes information about glycerol stocks used, input counts, timepoints and colonies counted. For analysis, the normalized CFU counts were saved in the CFU files GCobs_single_normalized.csv and GCobs_paired_normalized.csv. All results from the community assembly experiment are in the file communityassemblyexperiment.xlsx. For analysis, the data was copied into two CSV files, new_CFU_relative.csv and new_CFU.csv. The python scripts used for parameter estimation and R scripts used for analysis use the CSV files.
 
 Model data: Parameters estimated from single and pairwise growth curves were saved in the files est_single_all_6-3.txt and est_all_pairs_6-3.txt. These were used in the multi-species gLV model predictions.
 Growth curve data corresponding to the estimated parameters were also stored in the files allSingSpecTraj_5-3.csv and allPairSpecTraj_6-3.csv. These were used for supplementary figure 2. The file endpoints_new_OG_model_288.csv contains the predictions from the gLV model.
@@ -26,6 +26,8 @@ Part A: python scripts used for parameter estimation
 4.	rejSampPair.py - We used this script to obtain the parameters that best fit our observed data by minimizing the log-squared distance between the modeled and observed growth curves at all time points. Again, used a similar approach as above to generate the data in est_all_pairs_6-3.txt.
 
 Part B: python scripts used for gLV model
+
+Part C: R scripts used for analysis
 
 
 
