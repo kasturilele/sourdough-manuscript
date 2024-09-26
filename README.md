@@ -13,10 +13,10 @@ Species and Strain IDs used in the scripts:
 9.	177 - Kazakhstania servazzii
 
 Raw data information:
-Experiment data: All original raw data from the growth curves are in the excel sheets singlegrowthrawdata.xlsx and pairwisegrowthrawdata.xlsx. This includes information about glycerol stocks used, input counts, timepoints and colonies counted. For analysis, the normalized CFU counts were saved in the CFU files GCobs_single_normalized.csv and GCobs_paired_normalized.csv. The python scripts used for parameter estimation and R scripts used for analysis use these files.
+Experiment data: All original raw data from the growth curves are in the excel sheets singlegrowthrawdata.xlsx and pairwisegrowthrawdata.xlsx. This includes information about glycerol stocks used, input counts, timepoints and colonies counted. For analysis, the normalized CFU counts were saved in the CFU files GCobs_single_normalized.csv and GCobs_paired_normalized.csv. All results from the community ass The python scripts used for parameter estimation and R scripts used for analysis use these files.
 
 Model data: Parameters estimated from single and pairwise growth curves were saved in the files est_single_all_6-3.txt and est_all_pairs_6-3.txt. These were used in the multi-species gLV model predictions.
-Growth curve data corresponding to the estimated parameters were also stored in the files allSingSpecTraj_5-3.csv and allPairSpecTraj_6-3.csv. These were used for supplementary figure 2.
+Growth curve data corresponding to the estimated parameters were also stored in the files allSingSpecTraj_5-3.csv and allPairSpecTraj_6-3.csv. These were used for supplementary figure 2. The file endpoints_new_OG_model_288.csv contains the predictions from the gLV model.
 
 Scripts used:
 Part A: python scripts used for parameter estimation
