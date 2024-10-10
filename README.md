@@ -16,7 +16,7 @@ Raw data information:
 Experiment data: All original raw data from the growth curves are in the excel sheets singlegrowthrawdata.xlsx and pairwisegrowthrawdata.xlsx. This includes information about glycerol stocks used, input counts, timepoints and colonies counted. For analysis, the normalized CFU counts were saved in the CFU files GCobs_single_normalized.csv and GCobs_paired_normalized.csv. All results from the community assembly experiment are in the file communityassemblyexperiment.xlsx. For analysis, the data was copied into two CSV files, new_CFU_relative.csv and new_CFU.csv. The python scripts used for parameter estimation and R scripts used for analysis use the CSV files.
 
 Model data: Parameters estimated from single and pairwise growth curves were saved in the files est_single_all_6-3.txt and est_all_pairs_6-3.txt. These were used in the multi-species gLV model predictions.
-Growth curve data corresponding to the estimated parameters were also stored in the files allSingSpecTraj_5-3.csv and allPairSpecTraj_6-3.csv. These were used for supplementary figure 2. The file endpoints_new_OG_model_288.csv contains the predictions from the gLV model.
+Growth curve data corresponding to the estimated parameters were also stored in the files allSingSpecTraj_5-3.csv and allPairSpecTraj_6-3.csv. These were used for supplementary figure 2. The file endpoints_new_OG_model_288.csv contains the predictions from the gLV model (for the full 9-species model). The files output288_[i].csv contain the predictions for the respective leave-one-out-model communities (which species was left out of the community is indicated by the number i). The file endpoints_new_serial_model.csv contains the predictions from the gLV model that included the additional serial dilution step.
 
 Scripts used:
 Part A: python scripts used for parameter estimation
@@ -31,7 +31,7 @@ Part B: python scripts used for gLV model
 3. model11_test_serial_transfer.py - Same as script 1, except this time the script has two models for every set of parameters - with and without bottlenecks. We added the bottlenecks simply by dividing the abundances at the end of a growth cycel by a dilution factor and using them as initial abundances for the new growth cycle. Also, we saved the entire growth curve data (growth over time) instead of just saving the species' abundances at the final timepoint.
 
 Part C: R scripts used for analysis
-
+The script analysis_final_all.R contains all the R scripts used for statistical analysis and making figures. Some of the file locations need to be changed for the script to work correctly.
 
 
 
