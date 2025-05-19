@@ -27,8 +27,9 @@ Part A: python scripts used for parameter estimation-
 
 Part B: python scripts used for gLV model-
 1. model10_newPairwise.py - This is the main script we used to write the multi-species gLV model and generate species abundance predictions. Briefly, the script takes as input the growth parameters we estimated in the previous section, and randomly samples them to generate multi-species model predictions. TWe use the function solve_ivp to solve the 9-species differential equation. The other two scripts are small modifications made to this core script.
-2. model10_newPairwise-LOO.py - Same as the previous script, except we now added an extra line of code to set each species' initial abundance to 0 and save the species abundances at the end.
-3. model11_test_serial_transfer.py - Same as script 1, except this time the script has two models for every set of parameters - with and without bottlenecks. We added the bottlenecks simply by dividing the abundances at the end of a growth cycel by a dilution factor and using them as initial abundances for the new growth cycle. Also, we saved the entire growth curve data (growth over time) instead of just saving the species' abundances at the final timepoint.
+2. model10_newPairwise_serialTransfer.py - Same as script 1, except this time we added bottlenecks. We added the bottlenecks simply by dividing the abundances at the end of a growth cycle by a dilution factor and using them as initial abundances for the new growth cycle.
+3. model11_test_serial_transfer.py - Same as script 1, except this time the script has two models for every set of parameters - with and without bottlenecks. Also, we saved the entire growth curve data (growth over time) instead of just saving the species' abundances at the final timepoint.
+4. model10_newPairwise-LOO_SerialTransfer.py - Same as script 2, except we now added an extra line of code to set each species' initial abundance to 0 and save the species abundances at the end.
 
 Part C: R scripts used for analysis-
 The script analysis_final_all.R contains all the R scripts used for statistical analysis and making figures. Some of the file locations need to be changed for the script to work correctly.
