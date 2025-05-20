@@ -1,5 +1,5 @@
 # sourdough-manuscript
-This repository contains all the code used in the parameter estimation, generalized Lotka-Volterra (gLV) model predictions, and analysis and figure generation for the manuscript "Using Lotka-Volterra models to understand the dynamics of multi-species community assembly in sourdough". 
+This repository contains all the code used in the parameter estimation, generalized Lotka-Volterra (gLV) model predictions, and analysis and figure generation for the manuscript "Pairwise interactions and serial bottlenecks help explain species composition in a multi-species microbial community". 
 
 Species and Strain IDs used in the scripts:
 1.	17B2 - Fructilactobacillus sanfranciscensis
