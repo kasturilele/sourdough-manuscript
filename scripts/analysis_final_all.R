@@ -415,22 +415,6 @@ p_ordered <- ggplot(data = new_data_long, mapping = aes(x = reorder(Population, 
 p_ordered #1242X261
 ggsave("~/Documents/for_paper/figures_dump/2_model_clustered.pdf", width=12.42, height=2.60, units = "in")
 
-#make a data frame with average model and observed community
-avg_both <- data.frame(Species=character(),
-                       avg_model=double(),
-                       avg_obs=double())
-
-#measuring average proportion of each species
-i <- 1
-for(i in 1:9){
-  species <- new_data[,i]
-  avg_species <- mean(species)
-  print(colnames(new_data)[i])
-  print(avg_species*100)
-  avg_both[i,1] <- colnames(new_data)[i]
-  avg_both[i,2] <- avg_species
-}
-
 #cluster for obs data
 distance_obs <- vegdist(compare_df, "bray") #distance matrix
 
@@ -474,16 +458,6 @@ p_obs <- ggplot(data = compare_long, mapping = aes(x = reorder(Population, order
 
 p_obs #1242X261
 ggsave("~/Documents/for_paper/figures_dump/observed_all.pdf", width=2.42, height=2.60, units = "in")
-
-#measuring average proportion of each species
-i <- 1
-for(i in 1:9){
-  species <- compare_df[,i]
-  avg_species <- mean(species)
-  print(colnames(compare_df)[i])
-  print(avg_species*100)
-  avg_both[i,3] <- avg_species#avg_both was made earlier for the model avgs
-}
 
 #shannon,bray-curtis,NMDS for the model+obs combined
 
@@ -557,11 +531,13 @@ p_grad_sp <- p_grad +
   geom_segment(aes(x = 0, y = 0, xend = MDS1, yend = MDS2), 
                data = sp, size =1, alpha = 0.5, colour = "#4d4d4d") +
   geom_text(data = sp, aes(x = MDS1, y = MDS2), alpha = 0.75,
-            label = row.names(sp))
+            label = row.names(sp))+
+  xlim(-0.3,0.5)+
+  ylim(-0.2,0.6)
 p_grad_sp
 
 
-ggsave("~/Documents/for_paper/figures_dump/2_nmds_both_spscores.pdf", width=6.40, height=6.40, units = "in")
+ggsave("~/Documents/for_paper/figures_dump/2_nmds_both_spscores_new.pdf", width=6.40, height=6.40, units = "in")
 
 #3 - model vs experiment ranked by abundance
 #3a model data ranked by abundance
@@ -647,6 +623,31 @@ p3
 ggsave("~/Documents/for_paper/figures_dump/2_bubble_both.pdf", width=10.24, height=3.2, units = "in")
 
 #3d doing a spearman correlation on average model and observed rank
+#make a data frame with average model and observed community
+avg_both <- data.frame(Species=character(),
+                       avg_model=double(),
+                       avg_obs=double())
+
+#measuring average proportion of each species - model
+i <- 1
+for(i in 1:9){
+  species <- new_data[,i]
+  avg_species <- mean(species)
+  print(colnames(new_data)[i])
+  print(avg_species*100)
+  avg_both[i,1] <- colnames(new_data)[i]
+  avg_both[i,2] <- avg_species
+}
+
+#measuring average proportion of each species - observed
+i <- 1
+for(i in 1:9){
+  species <- compare_df[,i]
+  avg_species <- mean(species)
+  print(colnames(compare_df)[i])
+  print(avg_species*100)
+  avg_both[i,3] <- avg_species#avg_both was made earlier for the model avgs
+}
 spear_both <- cor.test(avg_both$avg_model, avg_both$avg_obs, method = 'spearm', alternative = 'two.sided', exact = FALSE)
 spear_both
 
@@ -670,12 +671,9 @@ for(i in 1:9){
     geom_point(shape = 21, stroke = 1.0, colour = cols, aes(size = rel_abd)) +
     geom_point(data = coords_nmds_obs, mapping = aes(x = MDS1, y = MDS2), shape = 16, size = 1.0, colour = "#000000", alpha = 0.5) +
     geom_point(data = coords_nmds_model, mapping = aes(x = MDS1, y = MDS2), shape = 16, size = 1.0, colour = "#888888", alpha = 0.25) +
-    coord_cartesian(xlim = c(-0.3,0.25), ylim = c(-0.2, 0.25)) +
+    coord_cartesian(xlim = c(-0.3,0.25), ylim = c(-0.3, 0.25)) +
     #scale_color_manual(values = colour_names) +
-    theme(axis.title = element_blank(),
-          axis.text = element_blank(),
-          axis.ticks = element_blank(),
-          legend.position = 'none')
+    theme(legend.position = 'none')
   p_sp
   relAbdPlot[[length(relAbdPlot)+1]] <- p_sp
 }
@@ -687,7 +685,7 @@ relAbdAll <- plot_grid(
 )
 relAbdAll
 
-ggsave("~/Documents/for_paper/figures_dump/2_nmds_relsp.pdf", width=6.4, height=6.4, units = "in")
+ggsave("~/Documents/for_paper/figures_dump/2_nmds_relsp_new.pdf", width=8.0, height=8.0, units = "in")
 
 #--------- figure 6: leave-one-out data ---------
 
@@ -796,28 +794,35 @@ coords_obs <- as.data.frame(nmds_obs$points)
 coords_obs$Source = obs_meta$Source
 
 #separate model/obs data to create graphs coloured by hierarchical clustering of model
+#subset all species data separately
+coords_obs_all <- subset(coords_obs, Source == 'all')
+coords_obs_8sp <- subset(coords_obs, Source != 'all')
 
 #plot nmds coloured by gradient
-p_nmds = ggplot(coords_obs, aes(x = MDS1, y = MDS2)) +
+p_nmds = ggplot(coords_obs_8sp, aes(x = MDS1, y = MDS2)) +
   theme_bw() +
   geom_point(shape = 16, size = 5.0, alpha = 0.60, aes(colour = Source)) +
-  scale_color_manual(values = colour_names) + 
+  geom_point(data = coords_obs_all, shape = 21, size = 3.0, stroke = 2.0, alpha = 0.60, colour = "#111111") +
+  scale_color_manual(values = colour_names) +
+  xlim(-0.25,0.75)+
+  ylim(-0.25,0.5)+
   theme(axis.text = element_text(size = 16),
         axis.title = element_text(size = 16),
         legend.text = element_text(size = 16),
         legend.title = element_text(size = 16),
         legend.position = 'none')
 p_nmds
+ggsave("~/Documents/for_paper/figures_dump/nmds_all_obs_new.pdf", width=6.40, height = 4.8, units = "in")
 
 #messing around with species scores (wascores vs envdist)
-sp <- as.data.frame(wascores(x = nmds_obs$points, w = obs_df, expand = TRUE))
-p_nmds_sp <- p_nmds +
-  geom_segment(aes(x = 0, y = 0, xend = MDS1, yend = MDS2), 
-               data = sp, size =1, alpha = 0.5, colour = "#4d4d4d") +
-  geom_text(data = sp, aes(x = MDS1, y = MDS2), alpha = 0.75,
-            label = row.names(sp))
-p_nmds_sp
-ggsave("~/Documents/figures_dump/LOO/nmds_all_obs.pdf", width=6.40, height=6.40, units = "in")
+# sp <- as.data.frame(wascores(x = nmds_obs$points, w = obs_df, expand = TRUE))
+# p_nmds_sp <- p_nmds +
+#   geom_segment(aes(x = 0, y = 0, xend = MDS1, yend = MDS2), 
+#                data = sp, size =1, alpha = 0.5, colour = "#4d4d4d") +
+#   geom_text(data = sp, aes(x = MDS1, y = MDS2), alpha = 0.75,
+#             label = row.names(sp))
+# p_nmds_sp
+# ggsave("~/Documents/figures_dump/LOO/nmds_all_obs.pdf", width=6.40, height=6.40, units = "in")
 
 # mindist comparisons for model:obs for all vs LOOs
 setwd("/Users/kasturilele/Documents/community")
@@ -1091,8 +1096,8 @@ plot_mindist <- ggplot(data = mindist_both) +
   theme_bw() +
   geom_density(aes(OG),colour = "#cccccc", adjust = 0.75) +
   geom_density(aes(new),colour = "#111111", adjust = 0.75) +
-  xlim(0,0.5) +
-  ylim(0,30) +
+  #xlim(0,0.5) +
+  #ylim(0,30) +
   theme(axis.text = element_text(size = 16),
         axis.title = element_text(size = 16),
         legend.text = element_text(size = 16),
@@ -1175,7 +1180,6 @@ p_grad_sp <- p_grad +
   geom_text(data = sp, aes(x = MDS1, y = MDS2), alpha = 0.75,
             label = row.names(sp))
 p_grad_sp
-
 
 ggsave("~/Documents/for_paper/figures_dump/4_nmds_serial_spscores.pdf", width=6.40, height=6.40, units = "in")
 
@@ -1263,6 +1267,33 @@ p3
 ggsave("~/Documents/for_paper/figures_dump/4_bubble_both.pdf", width=10.24, height=3.2, units = "in")
 
 #3d doing a spearman correlation on average model and observed rank
+
+#make a data frame with average model and observed community
+avg_both <- data.frame(Species=character(),
+                       avg_model=double(),
+                       avg_obs=double())
+
+#measuring average proportion of each species - model
+i <- 1
+for(i in 1:9){
+  species <- new_data[,i]
+  avg_species <- mean(species)
+  print(colnames(new_data)[i])
+  print(avg_species*100)
+  avg_both[i,1] <- colnames(new_data)[i]
+  avg_both[i,2] <- avg_species
+}
+
+#measuring average proportion of each species - observed
+i <- 1
+for(i in 1:9){
+  species <- compare_df[,i]
+  avg_species <- mean(species)
+  print(colnames(compare_df)[i])
+  print(avg_species*100)
+  avg_both[i,3] <- avg_species#avg_both was made earlier for the model avgs
+}
+
 spear_both <- cor.test(avg_both$avg_model, avg_both$avg_obs, method = 'spearm', alternative = 'two.sided', exact = FALSE)
 spear_both
 
@@ -1286,12 +1317,9 @@ for(i in 1:9){
     geom_point(shape = 21, stroke = 1.0, colour = cols, aes(size = rel_abd)) +
     geom_point(data = coords_nmds_obs, mapping = aes(x = MDS1, y = MDS2), shape = 16, size = 1.0, colour = "#000000", alpha = 0.5) +
     geom_point(data = coords_nmds_model, mapping = aes(x = MDS1, y = MDS2), shape = 16, size = 1.0, colour = "#888888", alpha = 0.25) +
-    coord_cartesian(xlim = c(-0.3,0.25), ylim = c(-0.2, 0.25)) +
+    coord_cartesian(xlim = c(-0.3,0.25), ylim = c(-0.3, 0.25)) +
     #scale_color_manual(values = colour_names) +
-    theme(axis.title = element_blank(),
-          axis.text = element_blank(),
-          axis.ticks = element_blank(),
-          legend.position = 'none')
+    theme(legend.position = 'none')
   p_sp
   relAbdPlot[[length(relAbdPlot)+1]] <- p_sp
 }
@@ -1303,7 +1331,7 @@ relAbdAll <- plot_grid(
 )
 relAbdAll
 
-ggsave("~/Documents/for_paper/figures_dump/4_nmds_relsp.pdf", width=6.4, height=6.4, units = "in")
+ggsave("~/Documents/for_paper/figures_dump/4_nmds_relsp_new.pdf", width=6.4, height=6.4, units = "in")
 
 #-------- additional analyses and supplementary figures --------
 
